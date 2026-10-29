@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Rooms')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <span>Rooms</span>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success">
+            ✅ <span th:text="${successMessage}"></span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>🏫 Rooms</h2>
+                <div class="actions">
+                    <button type="button" onclick="window.print()" class="btn btn-secondary btn-sm">🖨️ Print</button>
+                    <a th:href="@{/admin/rooms/new}" class="btn btn-primary btn-sm">➕ Add Room</a>
+                </div>
+            </div>
+            <div th:if="${rooms.isEmpty()}">
+                <div class="alert alert-info">No rooms found. Add your first room!</div>
+            </div>
+            <table th:if="${!rooms.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Rows</th>
+                        <th>Seats/Row</th>
+                        <th>Capacity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${rooms}">
+                        <td th:text="${r.roomCode}">HALL-A</td>
+                        <td th:text="${r.name}">Hall</td>
+                        <td th:text="${r.rowCount}">5</td>
+                        <td th:text="${r.seatsPerRow}">6</td>
+                        <td th:text="${r.capacity}">30</td>
+                        <td>
+                            <div class="actions">
+                                <a th:href="@{/admin/rooms/{id}(id=${r.id})}" class="btn btn-secondary btn-sm">View</a>
+                                <a th:href="@{/admin/rooms/{id}/edit(id=${r.id})}" class="btn btn-primary btn-sm">Edit</a>
+                                <form th:action="@{/admin/rooms/{id}/delete(id=${r.id})}" method="post"
+                                      onsubmit="return confirm('Delete this room?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

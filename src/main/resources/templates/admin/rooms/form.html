@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head(${isNew} ? 'Add Room' : 'Edit Room')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <a th:href="@{/admin/rooms}">Rooms</a>
+            <span class="separator">/</span>
+            <span th:text="${isNew} ? 'Add' : 'Edit'">Add</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 th:text="${isNew} ? '➕ Add Room' : '✏️ Edit Room'">Add Room</h2>
+            </div>
+            <form th:action="${isNew} ? @{/admin/rooms} : @{/admin/rooms/{id}(id=${room.id})}"
+                  th:object="${room}" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="roomCode">Room Code *</label>
+                        <input type="text" id="roomCode" th:field="*{roomCode}"
+                               class="form-control" th:classappend="${#fields.hasErrors('roomCode')} ? 'is-invalid'" required>
+                        <p th:if="${#fields.hasErrors('roomCode')}" th:errors="*{roomCode}" class="error-text"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Room Name *</label>
+                        <input type="text" id="name" th:field="*{name}"
+                               class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'" required>
+                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-text"></p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="rowCount">Number of Rows *</label>
+                        <input type="number" id="rowCount" th:field="*{rowCount}" min="1"
+                               class="form-control" th:classappend="${#fields.hasErrors('rowCount')} ? 'is-invalid'" required>
+                        <p th:if="${#fields.hasErrors('rowCount')}" th:errors="*{rowCount}" class="error-text"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="seatsPerRow">Seats per Row *</label>
+                        <input type="number" id="seatsPerRow" th:field="*{seatsPerRow}" min="1"
+                               class="form-control" th:classappend="${#fields.hasErrors('seatsPerRow')} ? 'is-invalid'" required>
+                        <p th:if="${#fields.hasErrors('seatsPerRow')}" th:errors="*{seatsPerRow}" class="error-text"></p>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success" th:text="${isNew} ? 'Create Room' : 'Update Room'">Save</button>
+                    <a th:href="@{/admin/rooms}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

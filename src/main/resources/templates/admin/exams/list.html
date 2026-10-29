@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Exams')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <span>Exams</span>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success">
+            ✅ <span th:text="${successMessage}"></span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>📝 Exams</h2>
+                <div class="actions">
+                    <button type="button" onclick="window.print()" class="btn btn-secondary btn-sm">🖨️ Print</button>
+                    <a th:href="@{/admin/exams/new}" class="btn btn-primary btn-sm">➕ Add Exam</a>
+                </div>
+            </div>
+            <div th:if="${exams.isEmpty()}">
+                <div class="alert alert-info">No exams found. Add your first exam!</div>
+            </div>
+            <table th:if="${!exams.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Duration</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="e : ${exams}">
+                        <td th:text="${e.examCode}">MATH101</td>
+                        <td th:text="${e.name}">Math</td>
+                        <td th:text="${e.subject}">Subject</td>
+                        <td th:text="${e.date}">2024-01-01</td>
+                        <td th:text="${e.duration + ' min'}">180 min</td>
+                        <td>
+                            <div class="actions">
+                                <a th:href="@{/admin/exams/{id}(id=${e.id})}" class="btn btn-secondary btn-sm">View</a>
+                                <a th:href="@{/admin/exams/{id}/edit(id=${e.id})}" class="btn btn-primary btn-sm">Edit</a>
+                                <form th:action="@{/admin/exams/{id}/delete(id=${e.id})}" method="post"
+                                      onsubmit="return confirm('Delete this exam?');">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

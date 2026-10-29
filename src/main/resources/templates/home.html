@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Seating System</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+        .hero { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+        .hero-content { max-width: 600px; }
+        .hero h1 { font-size: 2.5rem; color: #1e3a5f; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; color: #64748b; margin-bottom: 2rem; line-height: 1.6; }
+        .btn-primary { display: inline-block; padding: 0.875rem 2rem; background: #1e3a5f; color: #fff; text-decoration: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; transition: background 0.2s; border: none; cursor: pointer; }
+        .btn-primary:hover { background: #15304f; }
+        .btn-secondary { display: inline-block; padding: 0.875rem 2rem; background: #fff; color: #1e3a5f; text-decoration: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; border: 2px solid #1e3a5f; margin-left: 1rem; transition: background 0.2s; }
+        .btn-secondary:hover { background: #e2e8f0; }
+        .top-bar { background: #1e3a5f; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .top-bar a { color: #fff; text-decoration: none; font-weight: 600; }
+        .logo { font-size: 1.3rem; font-weight: 700; }
+        .nav-links a { margin-left: 1.5rem; opacity: 0.9; }
+        .nav-links a:hover { opacity: 1; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto 3rem; padding: 0 2rem; }
+        .feature-card { background: #fff; border-radius: 10px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); text-align: center; }
+        .feature-card h3 { color: #1e3a5f; margin-bottom: 0.5rem; }
+        .feature-card p { color: #64748b; font-size: 0.95rem; }
+        .feature-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <span class="logo">🎓 Exam Seating System</span>
+        <div class="nav-links">
+            <a href="/search">Find My Seat</a>
+            <a href="/login">Admin Login</a>
+        </div>
+    </div>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Exam Seating Arrangement System</h1>
+            <p>Find your exam seat quickly. Admins can manage students, exams, rooms, and automatically generate seating plans.</p>
+            <a th:href="@{/search}" class="btn-primary">🔍 Find My Seat</a>
+            <a th:href="@{/login}" class="btn-secondary">🔐 Admin Login</a>
+        </div>
+    </div>
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Seat Lookup</h3>
+            <p>Students can find their assigned seat by entering their roll number.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🏫</div>
+            <h3>Room Management</h3>
+            <p>Configure exam halls with custom row and seat layouts.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Auto-Generate</h3>
+            <p>Automatically assign seats row by row across multiple rooms.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Dashboard')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>📊 Dashboard</h1>
+            <p>Overview of the exam seating system</p>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">👩‍🎓</div>
+                <div class="stat-info">
+                    <h3 th:text="${totalStudents}">0</h3>
+                    <p>Total Students</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">📝</div>
+                <div class="stat-info">
+                    <h3 th:text="${totalExams}">0</h3>
+                    <p>Total Exams</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">🏫</div>
+                <div class="stat-info">
+                    <h3 th:text="${totalRooms}">0</h3>
+                    <p>Total Rooms</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon amber">📋</div>
+                <div class="stat-info">
+                    <h3 th:text="${publishedPlans}">0</h3>
+                    <p>Published Assignments</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Quick Actions</h2>
+            </div>
+            <div class="actions" style="gap: 1rem;">
+                <a th:href="@{/admin/students/new}" class="btn btn-primary">➕ Add Student</a>
+                <a th:href="@{/admin/exams/new}" class="btn btn-primary">➕ Add Exam</a>
+                <a th:href="@{/admin/rooms/new}" class="btn btn-primary">➕ Add Room</a>
+                <a th:href="@{/admin/seating/generate}" class="btn btn-success">⚡ Generate Seating</a>
+                <button type="button" onclick="window.print()" class="btn btn-secondary">🖨️ Print Dashboard</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

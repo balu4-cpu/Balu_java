@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Preview Seating')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <!-- Navigation breadcrumb (hidden when printed) -->
+        <div class="breadcrumb no-print">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <a th:href="@{/admin/seating}">Seating Plans</a>
+            <span class="separator">/</span>
+            <span>Generated Preview</span>
+        </div>
+
+        <!-- Banner notice (hidden when printed) -->
+        <div class="alert alert-warning no-print">
+            ℹ Seating arrangement generated. Review the arrangement below and use the <strong>Print</strong> button at the bottom of the page to print a clean copy.
+        </div>
+
+        <!-- Print-only official document header -->
+        <div class="print-only print-document-header">
+            <h1>EXAMINATION SEATING ARRANGEMENT</h1>
+            <p><strong th:text="${exam.name} + ' (' + ${exam.examCode} + ')'">Exam Name</strong></p>
+            <p th:text="'Subject: ' + ${exam.subject} + ' | Date: ' + ${exam.date} + ' | Duration: ' + ${exam.duration} + ' mins'">Details</p>
+            <p th:text="'Total Candidates: ' + ${assignments.size()} + ' | Rooms: ' + ${rooms.size()}">Stats</p>
+        </div>
+
+        <!-- Visual layout section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 th:text="'Generated Layout: ' + ${exam.name} + ' (' + ${exam.examCode} + ')'">Generated Seating</h2>
+            </div>
+            <p style="margin-bottom:1rem; color:#64748b;"
+               th:text="'Total assignments: ' + ${assignments.size()} + ' students allocated across ' + ${rooms.size()} + ' room(s)'">Info</p>
+
+            <!-- Visual grid per room -->
+            <div th:each="room : ${rooms}" style="margin-bottom: 2rem; page-break-inside: avoid;">
+                <h3 style="color:#1e3a5f; margin-bottom:0.75rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem;"
+                    th:text="${room.name + ' (' + room.roomCode + ') — Capacity: ' + room.capacity + ' seats'}">Room</h3>
+                <div class="seating-grid">
+                    <div class="seating-row" th:each="row : ${#numbers.sequence(1, room.rowCount)}">
+                        <span class="seat-label" th:text="'Row ' + ${row}">Row 1</span>
+                        <th:block th:each="s : ${#numbers.sequence(1, room.seatsPerRow)}">
+                            <th:block th:each="a : ${assignments}" th:if="${a.room.id == room.id and a.rowNumber == row and a.seatNumber == s}">
+                                <div class="seat seat-occupied">
+                                    <span class="roll" th:text="${a.student.rollNumber}">CS001</span>
+                                    <span class="seat-num" th:text="'S' + ${s}">S1</span>
+                                </div>
+                            </th:block>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table view -->
+        <div class="card">
+            <div class="card-header">
+                <h2>📋 Student Seating List</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">#</th>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        <th>Course</th>
+                        <th>Room</th>
+                        <th>Row</th>
+                        <th>Seat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="a, iter : ${assignments}">
+                        <td th:text="${iter.count}">1</td>
+                        <td style="font-weight: 700;" th:text="${a.student.rollNumber}">CS001</td>
+                        <td th:text="${a.student.name}">Name</td>
+                        <td th:text="${a.student.course}">CS</td>
+                        <td th:text="${a.room.roomCode}">HALL-A</td>
+                        <td th:text="${a.rowNumber}">1</td>
+                        <td th:text="${a.seatNumber}">1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Print-only signature block -->
+        <div class="print-only print-signatures">
+            <div class="signature-box">
+                Invigilator Signature
+            </div>
+            <div class="signature-box">
+                Chief Superintendent
+            </div>
+            <div class="signature-box">
+                Controller of Examinations
+            </div>
+        </div>
+
+        <!-- Bottom Action Card with Print and Save options (excluded when printing) -->
+        <div class="card no-print" style="background: #ffffff; border-top: 3px solid #1e3a5f;">
+            <div class="card-header" style="margin-bottom: 0.5rem;">
+                <h2>Actions</h2>
+                <span style="color: #64748b; font-size: 0.9rem;">Print a physical copy or save to system</span>
+            </div>
+            <form th:action="@{/admin/seating/save}" method="post">
+                <input type="hidden" name="examId" th:value="${examId}">
+                <input th:each="rid : ${roomIds}" type="hidden" name="roomIds" th:value="${rid}">
+                <div class="form-actions" style="margin-top: 0.5rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <button type="button" onclick="window.print()" class="btn btn-primary" style="font-size: 1.05rem; padding: 0.75rem 1.5rem;">
+                        🖨️ Print Seating Arrangement
+                    </button>
+                    <button type="submit" class="btn btn-success" style="font-size: 1.05rem; padding: 0.75rem 1.5rem;">
+                        💾 Save as Draft
+                    </button>
+                    <a th:href="@{/admin/seating/generate}" class="btn btn-secondary" style="font-size: 1.05rem; padding: 0.75rem 1.5rem;">
+                        ← Back to Generate
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

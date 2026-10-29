@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Generate Seating')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <a th:href="@{/admin/seating}">Seating Plans</a>
+            <span class="separator">/</span>
+            <span>Generate</span>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-error">
+            ❌ <span th:text="${errorMessage}"></span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>⚡ Generate Seating Plan</h2>
+            </div>
+            <form th:action="@{/admin/seating/preview}" method="post">
+                <div class="form-group">
+                    <label for="examId">Select Exam *</label>
+                    <select id="examId" name="examId" class="form-control" required>
+                        <option value="">— Choose an exam —</option>
+                        <option th:each="exam : ${exams}" th:value="${exam.id}"
+                                th:text="${exam.examCode + ' — ' + exam.name + ' (' + exam.date + ')'}">Exam</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Select Rooms *</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item" th:each="room : ${rooms}">
+                            <input type="checkbox" th:id="'room-' + ${room.id}" name="roomIds" th:value="${room.id}">
+                            <label th:for="'room-' + ${room.id}"
+                                   th:text="${room.roomCode + ' — ' + room.name + ' (Capacity: ' + room.capacity + ')'}">Room</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Preview Seating Plan</button>
+                    <a th:href="@{/admin/seating}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

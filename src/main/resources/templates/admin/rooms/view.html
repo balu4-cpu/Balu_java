@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Room Details')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <a th:href="@{/admin/rooms}">Rooms</a>
+            <span class="separator">/</span>
+            <span th:text="${room.roomCode}">HALL-A</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>🏫 Room Details</h2>
+                <div class="actions">
+                    <a th:href="@{/admin/rooms/{id}/edit(id=${room.id})}" class="btn btn-primary btn-sm">✏️ Edit</a>
+                    <form th:action="@{/admin/rooms/{id}/delete(id=${room.id})}" method="post"
+                          onsubmit="return confirm('Delete this room?');" style="display:inline">
+                        <button type="submit" class="btn btn-danger btn-sm">🗑 Delete</button>
+                    </form>
+                </div>
+            </div>
+            <div class="detail-row">
+                <span class="label">Room Code</span>
+                <span class="value" th:text="${room.roomCode}">HALL-A</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Name</span>
+                <span class="value" th:text="${room.name}">Hall A</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Rows</span>
+                <span class="value" th:text="${room.rowCount}">5</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Seats per Row</span>
+                <span class="value" th:text="${room.seatsPerRow}">6</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Total Capacity</span>
+                <span class="value" th:text="${room.capacity}">30</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1rem; color: #1e3a5f;">Room Layout Preview</h3>
+            <div class="seating-grid">
+                <div class="seating-row" th:each="row : ${#numbers.sequence(1, room.rowCount)}">
+                    <span class="seat-label" th:text="'Row ' + ${row}">Row 1</span>
+                    <div class="seat seat-empty" th:each="s : ${#numbers.sequence(1, room.seatsPerRow)}">
+                        <span class="seat-num" th:text="'S' + ${s}">S1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a th:href="@{/admin/rooms}" class="btn btn-secondary">← Back to Rooms</a>
+    </div>
+</body>
+</html>

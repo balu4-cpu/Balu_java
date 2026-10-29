@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Student Details')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <a th:href="@{/admin/students}">Students</a>
+            <span class="separator">/</span>
+            <span th:text="${student.rollNumber}">CS001</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>👩‍🎓 Student Details</h2>
+                <div class="actions">
+                    <a th:href="@{/admin/students/{id}/edit(id=${student.id})}" class="btn btn-primary btn-sm">✏️ Edit</a>
+                    <form th:action="@{/admin/students/{id}/delete(id=${student.id})}" method="post"
+                          onsubmit="return confirm('Delete this student?');" style="display:inline">
+                        <button type="submit" class="btn btn-danger btn-sm">🗑 Delete</button>
+                    </form>
+                </div>
+            </div>
+            <div class="detail-row">
+                <span class="label">Roll Number</span>
+                <span class="value" th:text="${student.rollNumber}">CS001</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Name</span>
+                <span class="value" th:text="${student.name}">Name</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Email</span>
+                <span class="value" th:text="${student.email ?: 'N/A'}">email</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Course</span>
+                <span class="value" th:text="${student.course}">Course</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Year</span>
+                <span class="value" th:text="${student.year}">1</span>
+            </div>
+        </div>
+        <a th:href="@{/admin/students}" class="btn btn-secondary">← Back to Students</a>
+    </div>
+</body>
+</html>

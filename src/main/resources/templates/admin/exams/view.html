@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Exam Details')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <a th:href="@{/admin/exams}">Exams</a>
+            <span class="separator">/</span>
+            <span th:text="${exam.examCode}">MATH101</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>📝 Exam Details</h2>
+                <div class="actions">
+                    <a th:href="@{/admin/exams/{id}/edit(id=${exam.id})}" class="btn btn-primary btn-sm">✏️ Edit</a>
+                    <form th:action="@{/admin/exams/{id}/delete(id=${exam.id})}" method="post"
+                          onsubmit="return confirm('Delete this exam?');" style="display:inline">
+                        <button type="submit" class="btn btn-danger btn-sm">🗑 Delete</button>
+                    </form>
+                </div>
+            </div>
+            <div class="detail-row">
+                <span class="label">Exam Code</span>
+                <span class="value" th:text="${exam.examCode}">MATH101</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Name</span>
+                <span class="value" th:text="${exam.name}">Mathematics I</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Subject</span>
+                <span class="value" th:text="${exam.subject}">Mathematics</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Date</span>
+                <span class="value" th:text="${exam.date}">2024-01-01</span>
+            </div>
+            <div class="detail-row">
+                <span class="label">Duration</span>
+                <span class="value" th:text="${exam.duration + ' minutes'}">180 minutes</span>
+            </div>
+        </div>
+        <a th:href="@{/admin/exams}" class="btn btn-secondary">← Back to Exams</a>
+    </div>
+</body>
+</html>

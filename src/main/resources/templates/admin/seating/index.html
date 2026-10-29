@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/layout :: head('Seating Plans')}"></head>
+<body>
+    <nav th:replace="~{admin/fragments/layout :: navbar}"></nav>
+    <div class="container">
+        <div class="breadcrumb">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <span class="separator">/</span>
+            <span>Seating Plans</span>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success">
+            ✅ <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-error">
+            ❌ <span th:text="${errorMessage}"></span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>📋 Seating Plans</h2>
+                <a th:href="@{/admin/seating/generate}" class="btn btn-success btn-sm">⚡ Generate New Plan</a>
+            </div>
+            <div th:if="${exams.isEmpty()}">
+                <div class="alert alert-info">No exams found. Create an exam first to generate seating plans.</div>
+            </div>
+            <table th:if="${!exams.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>Exam Code</th>
+                        <th>Exam Name</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="exam : ${exams}">
+                        <td th:text="${exam.examCode}">MATH101</td>
+                        <td th:text="${exam.name}">Mathematics</td>
+                        <td th:text="${exam.date}">2024-01-01</td>
+                        <td>
+                            <span th:if="${examHasPlan[exam.id] and examIsPublished[exam.id]}"
+                                  class="badge badge-success">Published</span>
+                            <span th:if="${examHasPlan[exam.id] and !examIsPublished[exam.id]}"
+                                  class="badge badge-warning">Draft</span>
+                            <span th:if="${!examHasPlan[exam.id]}"
+                                  style="color: #94a3b8; font-size: 0.9rem;">No Plan</span>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a th:if="${examHasPlan[exam.id]}"
+                                   th:href="@{/admin/seating/{id}(id=${exam.id})}"
+                                   class="btn btn-secondary btn-sm">View</a>
+                                <form th:if="${examHasPlan[exam.id] and !examIsPublished[exam.id]}"
+                                      th:action="@{/admin/seating/{id}/publish(id=${exam.id})}" method="post"
+                                      style="display:inline">
+                                    <button type="submit" class="btn btn-success btn-sm">Publish</button>
+                                </form>
+                                <form th:if="${examHasPlan[exam.id]}"
+                                      th:action="@{/admin/seating/{id}/delete(id=${exam.id})}" method="post"
+                                      onsubmit="return confirm('Delete this seating plan?');"
+                                      style="display:inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
