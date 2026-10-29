@@ -5,11 +5,18 @@ import com.examseating.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 
 @Configuration
 public class DataInitializer {
+
+    @Value("${app.admin.username:admin}")
+    private String adminUsername;
+
+    @Value("${app.admin.password:admin123}")
+    private String adminPassword;
 
     @Bean
     public CommandLineRunner initData(
@@ -22,9 +29,12 @@ public class DataInitializer {
         return args -> {
             // Create admin user if none exists
             if (adminRepository.count() == 0) {
-                Admin admin = new Admin("admin", passwordEncoder.encode("admin123"));
+                if (adminPassword == null || adminPassword.isBlank()) {
+                    throw new IllegalStateException("Set ADMIN_PASSWORD before initializing the first admin account.");
+                }
+                Admin admin = new Admin(adminUsername, passwordEncoder.encode(adminPassword));
                 adminRepository.save(admin);
-                System.out.println("✔ Default admin user created (username: admin, password: admin123)");
+                System.out.println("✔ Initial admin user created (username: " + adminUsername + ")");
             }
 
             // Create sample students if none exist

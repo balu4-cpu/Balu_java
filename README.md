@@ -56,10 +56,23 @@ Navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 
 ### Default Admin Login
 
+- Local development only:
 - **Username:** `admin`
 - **Password:** `admin123`
 
-> ⚠ Change the default admin password after first login in a production environment.
+Production uses the `prod` profile and requires an `ADMIN_PASSWORD` environment variable when creating the first admin account. Do not use the local default credentials in a public deployment.
+
+## Deployment (Railway)
+
+The repository includes a Dockerfile that runs the application with the production profile.
+
+1. Create a Railway project and deploy this GitHub repository as a Docker service.
+2. Add a MySQL service to the same project.
+3. In the application service, reference the database service variables as `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, and `MYSQLDATABASE`.
+4. Add an `ADMIN_PASSWORD` secret for the initial admin account. You can optionally set `ADMIN_USERNAME`; it defaults to `admin`.
+5. Generate a public domain for the application service.
+
+The app requires a reachable MySQL database and a non-empty `ADMIN_PASSWORD` on first startup. Keep both database and admin credentials in the hosting provider's secret settings, never in source control.
 
 ## Running Tests
 
